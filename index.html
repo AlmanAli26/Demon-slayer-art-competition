@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demon Slayer Art Competition Registration</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      color: red;
+      text-align: center;
+    }
+
+    form {
+      max-width: 400px;
+      margin: 20px auto;
+      background-color: #333;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    }
+
+    label, p {
+      margin-bottom: 10px;
+      display: block;
+      color: white;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      box-sizing: border-box;
+      border: 1px solid #777;
+      border-radius: 4px;
+      background-color: #444;
+      color: white;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+      background-color: #333;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    }
+
+    th, td {
+      border: 1px solid red;
+      padding: 12px;
+      text-align: left;
+      color: white;
+    }
+
+    th {
+      background-color: red;
+    }
+
+    button {
+      background-color: red;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    button:hover {
+      background-color: white;
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Demon Slayer Art Competition Registration</h1>
+
+  <form id="registrationForm">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="terms">Terms and Conditions:</label>
+    <p>
+      BY REGISTERING, YOU AGREE TO THE FOLLOWING:
+      <br>
+      - The competition will close in 24 hours.
+      <br>
+      - The competition will be on Wednesday, January 3, 2024.
+      <br>
+      - Each participant can register only once.
+      <br>
+      - All submissions must be original.
+      <br>
+      - The judges' decisions are final.
+    </p>
+
+    <label for="acknowledge">I acknowledge the terms and conditions:</label>
+    <input type="checkbox" id="acknowledge" name="acknowledge" required>
+
+    <button type="button" onclick="registerParticipant()">Register</button>
+  </form>
+
+  <table id="participantsTable">
+    <thead>
+      <tr>
+        <th>Registered</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- This will be populated dynamically with JavaScript -->
+    </tbody>
+  </table>
+
+  <script>
+    function registerParticipant() {
+      const nameInput = document.getElementById('name');
+      const acknowledgeCheckbox = document.getElementById('acknowledge');
+
+      if (acknowledgeCheckbox.checked) {
+        const participantsTable = document.getElementById('participantsTable').getElementsByTagName('tbody')[0];
+        const newRow = participantsTable.insertRow(participantsTable.rows.length);
+        const cell = newRow.insertCell(0);
+        cell.innerHTML = nameInput.value;
+
+        // Save the participant data to localStorage
+        const participants = JSON.parse(localStorage.getItem('participants')) || [];
+        participants.push(nameInput.value);
+        localStorage.setItem('participants', JSON.stringify(participants));
+
+        // Additional logic to handle registrations goes here
+
+        // Clear the input field after registration
+        nameInput.value = '';
+      } else {
+        alert('Please acknowledge the terms and conditions to register.');
+      }
+    }
+
+    // Load participants from localStorage on page load
+    window.onload = function () {
+      const participants = JSON.parse(localStorage.getItem('participants')) || [];
+      const participantsTable = document.getElementById('participantsTable').getElementsByTagName('tbody')[0];
+
+      participants.forEach(participant => {
+        const newRow = participantsTable.insertRow(participantsTable.rows.length);
+        const cell = newRow.insertCell(0);
+        cell.innerHTML = participant;
+      });
+    };
+  </script>
+
+</body>
+</html>
