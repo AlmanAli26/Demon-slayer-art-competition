@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Demon Slayer Art Competition Registration</title>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
   <style>
     body {
       background-color: black;
@@ -28,7 +31,8 @@
       box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
     }
 
-    label, p {
+    label,
+    p {
       margin-bottom: 10px;
       display: block;
       color: white;
@@ -54,7 +58,8 @@
       box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
     }
 
-    th, td {
+    th,
+    td {
       border: 1px solid red;
       padding: 12px;
       text-align: left;
@@ -80,6 +85,7 @@
     }
   </style>
 </head>
+
 <body>
 
   <h1>Demon Slayer Art Competition Registration</h1>
@@ -121,6 +127,22 @@
   </table>
 
   <script>
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyCxuklV1cgYUIXCpk_YF9ajD43kTSbL_TA",
+  authDomain: "demonslayerartcomp.firebaseapp.com",
+  projectId: "demonslayerartcomp",
+  storageBucket: "demonslayerartcomp.appspot.com",
+  messagingSenderId: "864478542792",
+  appId: "1:864478542792:web:5080b5540639e506cb9efd",
+  measurementId: "G-DL52JG70CV"
+};
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    const database = firebase.database();
+
     function registerParticipant() {
       const nameInput = document.getElementById('name');
       const acknowledgeCheckbox = document.getElementById('acknowledge');
@@ -131,12 +153,8 @@
         const cell = newRow.insertCell(0);
         cell.innerHTML = nameInput.value;
 
-        // Save the participant data to localStorage
-        const participants = JSON.parse(localStorage.getItem('participants')) || [];
-        participants.push(nameInput.value);
-        localStorage.setItem('participants', JSON.stringify(participants));
-
-        // Additional logic to handle registrations goes here
+        // Save the participant data to Firebase
+        database.ref('participants').push(nameInput.value);
 
         // Clear the input field after registration
         nameInput.value = '';
@@ -145,18 +163,24 @@
       }
     }
 
-    // Load participants from localStorage on page load
-    window.onload = function () {
-      const participants = JSON.parse(localStorage.getItem('participants')) || [];
+    // Load participants from Firebase on page load
+    database.ref('participants').on('value', (snapshot) => {
+      const participants = snapshot.val() || [];
       const participantsTable = document.getElementById('participantsTable').getElementsByTagName('tbody')[0];
 
-      participants.forEach(participant => {
+      // Clear the table
+      participantsTable.innerHTML = '';
+
+      // Populate the table with the updated participant data
+      Object.values(participants).forEach(participant => {
         const newRow = participantsTable.insertRow(participantsTable.rows.length);
         const cell = newRow.insertCell(0);
         cell.innerHTML = participant;
       });
-    };
+    });
   </script>
 
 </body>
+
 </html>
+
