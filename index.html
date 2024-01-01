@@ -167,13 +167,14 @@ const firebaseConfig = {
       participantsTable.innerHTML = '';
 
       // Populate the table with the updated participant data
-      Object.values(participants).forEach(participant => {
+      Object.entries(participants).forEach(([key, participant]) => {
         const newRow = participantsTable.insertRow(participantsTable.rows.length);
         const cell = newRow.insertCell(0);
         cell.innerHTML = participant.name; // Access the 'name' property
       });
     });
   </script>
+
 
 
 </body>
